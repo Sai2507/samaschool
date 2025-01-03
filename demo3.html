@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Family Tree</title>
+
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #008aec;
+        min-height: 100vh;
+        overflow: auto;
+        position: relative;
+      }
+
+      .container {
+        position: relative;
+        min-width: 200vw;
+        min-height: 200vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 50px;
+      }
+
+      .tree {
+        position: relative;
+      }
+
+      .tree ul {
+        padding-top: 20px;
+        position: relative;
+        transition: all 0.5s;
+      }
+
+      .tree li {
+        float: left;
+        text-align: center;
+        list-style-type: none;
+        position: relative;
+        padding: 20px 5px 0 5px;
+        transition: transform 0.5s, opacity 0.5s;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .tree li.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .tree li::before,
+      .tree li::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 50%;
+        border-top: 1px solid #ccc;
+        width: 50%;
+        height: 20px;
+      }
+
+      .tree li::after {
+        right: auto;
+        left: 50%;
+        border-left: 1px solid #ccc;
+      }
+
+      .tree li:only-child::after,
+      .tree li:only-child::before {
+        display: none;
+      }
+
+      .tree li:first-child::before,
+      .tree li:last-child::after {
+        border: 0 none;
+      }
+
+      .tree li:last-child::before {
+        border-right: 1px solid #ccc;
+        border-radius: 0 5px 0 0;
+      }
+
+      .tree li:first-child::after {
+        border-radius: 5px 0 0 0;
+      }
+
+      .tree ul ul::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        border-left: 1px solid #ccc;
+        width: 0;
+        height: 20px;
+      }
+
+      .tree li a {
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        text-decoration: none;
+        color: #666;
+        font-family: Arial, Verdana, Tahoma;
+        font-size: 11px;
+        display: inline-block;
+        border-radius: 5px;
+        transition: all 0.5s;
+        background: linear-gradient(135deg, #ffffff, #e0e0e0);
+      }
+
+      .tree li a:hover {
+        background: #c8e4f8;
+        color: #000;
+        border: 1px solid #94a0b4;
+      }
+
+      .tree li a img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        border: 2px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="tree">
+        <ul>
+          <li>
+            <a href="#">
+              <img src="person.jpeg" alt="Parent" />
+              Parent
+            </a>
+            <ul>
+              <li>
+                <a href="#">
+                  <img src="person.jpeg" alt="Child" />
+                  Child
+                </a>
+                <ul>
+                  <li>
+                    <a href="#">
+                      <img src="person.jpeg" alt="Grandchild" />
+                      Grandchild
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#">
+                  <img src="person.jpeg" alt="Child" />
+                  Child
+                </a>
+                <ul>
+                  <li>
+                    <a href="#">
+                      <img src="person.jpeg" alt="Grandchild" />
+                      Grandchild
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <img src="person.jpeg" alt="Grandchild" />
+                      Grandchild
+                    </a>
+                    <ul>
+                      <li>
+                        <a href="#">
+                          <img src="person.jpeg" alt="Great Grandchild" />
+                          Great Grandchild
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <img src="person.jpeg" alt="Great Grandchild" />
+                          Great Grandchild
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <img src="person.jpeg" alt="Great Grandchild" />
+                          Great Grandchild
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <img src="person.jpeg" alt="Grandchild" />
+                      Grandchild
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("scroll", function () {
+        const items = document.querySelectorAll(".tree li");
+        const triggerHeight = window.innerHeight / 1.2;
+
+        items.forEach((item) => {
+          const rect = item.getBoundingClientRect();
+          if (rect.top < triggerHeight) {
+            item.classList.add("active");
+          }
+        });
+      });
+
+      window.addEventListener("resize", () => {
+        document.querySelector(".container").style.minWidth =
+          Math.max(document.body.scrollWidth, window.innerWidth) + "px";
+        document.querySelector(".container").style.minHeight =
+          Math.max(document.body.scrollHeight, window.innerHeight) + "px";
+      });
+    </script>
+  </body>
+</html>
